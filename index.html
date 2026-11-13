@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GETSITE01 | Bespoke Web Creation Studio</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Three.js for 360° Interactive 3D Globe -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Premium Google Fonts: Great Vibes (Cursive), Cinzel, & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        royal: {
+                            950: '#091526',
+                            900: '#0F223D',
+                            800: '#19355C',
+                            700: '#274C7E',
+                            400: '#648EC7',
+                        },
+                        cream: {
+                            50: '#FCFBF7',
+                            100: '#F7F5EE',
+                            200: '#EBE6D8',
+                        },
+                        gold: {
+                            300: '#F3D999',
+                            400: '#E5BE67',
+                            500: '#C99E3D',
+                        }
+                    },
+                    fontFamily: {
+                        cursive: ['"Great Vibes"', 'cursive'],
+                        display: ['"Cinzel"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #091526;
+            color: #FCFBF7;
+            overflow-x: hidden;
+        }
+
+        .mandala-bg {
+            background-color: #0B192E;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(39, 76, 126, 0.45) 0%, rgba(9, 21, 38, 0.96) 75%),
+                url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%233A5F96' stroke-width='1' stroke-opacity='0.22'%3E%3Ccircle cx='60' cy='60' r='55'/%3E%3Ccircle cx='60' cy='60' r='42' stroke-dasharray='4 3'/%3E%3Ccircle cx='60' cy='60' r='28'/%3E%3Cpath d='M60 5 L68 25 L60 45 L52 25 Z M60 115 L68 95 L60 75 L52 95 Z M5 60 L25 52 L45 60 L25 68 Z M115 60 L95 52 L75 60 L95 68 Z'/%3E%3Cpath d='M21 21 L38 30 L45 45 L30 38 Z M99 99 L82 90 L75 75 L90 82 Z M99 21 L90 38 L75 45 L82 30 Z M21 99 L30 82 L45 75 L38 90 Z'/%3E%3C/g%3E%3C/svg%3E");
+            background-attachment: fixed;
+        }
+
+        /* Cursive Brand Logo Gradient */
+        .cursive-logo {
+            background: linear-gradient(135deg, #FCFBF7 10%, #F3D999 45%, #C99E3D 75%, #FCFBF7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 18px rgba(229, 190, 103, 0.35));
+        }
+
+        /* 360 Globe Container */
+        #globe-container {
+            cursor: grab;
+            touch-action: none;
+        }
+        #globe-container:active {
+            cursor: grabbing;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(15, 34, 61, 0.65);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(252, 251, 247, 0.12);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(243, 217, 153, 0.45);
+            transform: translateY(-6px);
+        }
+
+        /* Smooth Slide Animation for Catalogue Sections */
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(45px) scale(0.98); }
+            to { opacity: 1; transform: translateX(0) scale(1); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-45px) scale(0.98); }
+            to { opacity: 1; transform: translateX(0) scale(1); }
+        }
+
+        .animate-slide-right {
+            animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-slide-left {
+            animation: slideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="mandala-bg min-h-screen flex flex-col justify-between selection:bg-gold-400 selection:text-royal-950">
+
+    <!-- NAVBAR -->
+    <nav class="sticky top-0 z-50 border-b border-cream-50/10 bg-royal-950/80 backdrop-blur-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Name in Cursive -->
+            <a href="#" class="flex items-center gap-3 group">
+                <span class="font-cursive text-4xl sm:text-5xl cursive-logo tracking-wide py-1">GETSITE 01</span>
+            </a>
+
+            <!-- Nav Links & Direct Instagram CTA -->
+            <div class="flex items-center gap-4 sm:gap-6">
+                <a href="#catalogue" class="hidden md:inline-block text-sm font-medium text-cream-100/80 hover:text-gold-300 transition">Catalogue</a>
+                <a href="#process" class="hidden md:inline-block text-sm font-medium text-cream-100/80 hover:text-gold-300 transition">How It Works</a>
+                <a href="https://www.instagram.com/getsite01" target="_blank" rel="noopener noreferrer" 
+                   class="inline-flex items-center gap-2 bg-cream-50 hover:bg-gold-300 text-royal-950 font-bold text-xs sm:text-sm px-5 py-2.5 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">
+                    <i class="fa-brands fa-instagram text-base"></i>
+                    <span>Contact on Insta</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION WITH 360° INTERACTIVE 3D LOGO GLOBE -->
+    <header class="relative pt-10 pb-20 lg:pt-14 lg:pb-24 px-4 sm:px-6 lg:px-8 text-center overflow-hidden">
+        <!-- Ambient Glow -->
+        <div class="absolute top-16 left-1/2 -translate-x-1/2 w-[450px] h-[450px] bg-gold-400/15 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-4xl mx-auto relative z-10">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-royal-800/70 border border-gold-300/30 text-gold-300 text-xs font-semibold tracking-widest uppercase mb-2">
+                <i class="fa-solid fa-globe fa-spin" style="--fa-animation-duration: 8s;"></i> Interactive 360° Brand Studio
+            </div>
+
+            <!-- 360° INTERACTIVE GLOBE CANVAS -->
+            <div class="relative mx-auto w-[300px] h-[300px] sm:w-[370px] sm:h-[370px] flex items-center justify-center my-2">
+                <!-- Decorative Outer Orbit Ring -->
+                <div class="absolute inset-2 rounded-full border border-dashed border-gold-300/25 pointer-events-none animate-[spin_25s_linear_infinite]"></div>
+                
+                <!-- 3D Three.js Canvas Mount -->
+                <div id="globe-container" class="w-full h-full relative z-10" title="Drag or Swipe to rotate 360°"></div>
+
+                <!-- Interactive Hint Badge -->
+                <div class="absolute -bottom-2 bg-royal-950/90 border border-gold-300/40 text-gold-300 text-[11px] font-semibold px-3.5 py-1 rounded-full shadow-lg pointer-events-none flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrows-rotate"></i> Drag / Swipe to Rotate 360°
+                </div>
+            </div>
+
+            <h1 class="font-display text-2xl sm:text-4xl font-extrabold text-cream-50 tracking-wide mt-6">
+                Crafting Digital Masterpieces For Your Brand
+            </h1>
+
+            <p class="mt-4 text-cream-200/80 text-sm sm:text-lg max-w-2xl mx-auto leading-relaxed font-light">
+                Apne business, store ya personal brand ke liye ek high-converting, animated aur modern website banwayein. Niche diye gaye catalogues slide karke dekhein aur direct Instagram par message karein.
+            </p>
+
+            <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="https://www.instagram.com/getsite01" target="_blank" rel="noopener noreferrer"
+                   class="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-cream-50 via-cream-100 to-gold-300 text-royal-950 font-bold px-8 py-4 rounded-2xl shadow-xl hover:shadow-gold-400/20 transition-all duration-300 transform hover:-translate-y-1 text-sm sm:text-base">
+                    <i class="fa-brands fa-instagram text-xl"></i>
+                    <span>Apni Website Banwayein (DM Us)</span>
+                </a>
+                <a href="#catalogue"
+                   class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-royal-900/80 hover:bg-royal-800 text-cream-50 border border-cream-50/20 font-semibold px-8 py-4 rounded-2xl transition text-sm sm:text-base">
+                    <span>Explore Catalogues</span>
+                    <i class="fa-solid fa-arrow-down text-xs text-gold-300"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- INTERACTIVE SLIDING CATALOGUE SECTION -->
+    <section id="catalogue" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-t border-cream-50/10 bg-royal-950/40">
+        <div class="max-w-7xl mx-auto">
+            <!-- Section Header -->
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <span class="text-gold-300 text-xs font-bold uppercase tracking-[0.2em]">Interactive Showcase</span>
+                <h2 class="font-display text-3xl sm:text-4xl font-bold text-cream-50 mt-2">Website Catalogues</h2>
+                <p class="text-cream-200/70 text-xs sm:text-sm mt-2">
+                    <i class="fa-solid fa-hand-pointer mr-1 text-gold-300"></i> Tabs par click karein ya cards par <span class="text-cream-50 font-semibold">Left / Right Slide</span> karein
+                </p>
+            </div>
+
+            <!-- Category Tabs + Prev/Next Controls -->
+            <div class="flex items-center justify-between gap-2 max-w-4xl mx-auto mb-10">
+                <button onclick="prevCategory()" aria-label="Previous Section" class="w-10 h-10 rounded-full glass-card flex items-center justify-center text-cream-50 hover:text-gold-300 shrink-0 transition">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+
+                <div id="category-tabs" class="flex items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar py-2 px-1">
+                    <button onclick="switchCategory(0)" class="cat-tab active px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-300 bg-cream-50 text-royal-950 shadow-md">
+                        <i class="fa-solid fa-bag-shopping mr-1.5"></i> E-Commerce Stores
+                    </button>
+                    <button onclick="switchCategory(1)" class="cat-tab px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-300 bg-royal-900/80 text-cream-100/80 border border-cream-50/15 hover:border-gold-300/50">
+                        <i class="fa-solid fa-building mr-1.5"></i> Business & Agency
+                    </button>
+                    <button onclick="switchCategory(2)" class="cat-tab px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-300 bg-royal-900/80 text-cream-100/80 border border-cream-50/15 hover:border-gold-300/50">
+                        <i class="fa-solid fa-user-tie mr-1.5"></i> Portfolio & Creators
+                    </button>
+                    <button onclick="switchCategory(3)" class="cat-tab px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-300 bg-royal-900/80 text-cream-100/80 border border-cream-50/15 hover:border-gold-300/50">
+                        <i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i> Custom & Landing Pages
+                    </button>
+                </div>
+
+                <button onclick="nextCategory()" aria-label="Next Section" class="w-10 h-10 rounded-full glass-card flex items-center justify-center text-cream-50 hover:text-gold-300 shrink-0 transition">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <!-- Swipeable Catalogue Container -->
+            <div id="swipe-area" class="relative min-h-[420px]">
+                <div id="catalogue-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Dynamic Catalogue Cards Injected Here -->
+                </div>
+            </div>
+
+            <!-- Slide Pagination Dots -->
+            <div id="pagination-dots" class="flex justify-center items-center gap-2.5 mt-10"></div>
+        </div>
+    </section>
+
+    <!-- WHY CHOOSE GETSITE01 -->
+    <section id="process" class="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 border-t border-cream-50/10">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card p-7 rounded-3xl transition duration-300">
+                    <div class="w-12 h-12 rounded-2xl bg-cream-50 text-royal-950 flex items-center justify-center text-xl font-bold mb-5">
+                        <i class="fa-solid fa-mobile-screen-button"></i>
+                    </div>
+                    <h3 class="font-display text-lg font-bold text-cream-50">100% Mobile-First</h3>
+                    <p class="text-cream-200/75 text-sm mt-2 leading-relaxed">Har website mobile, tablet aur desktop par ultra-fast aur smooth chalti hai.</p>
+                </div>
+
+                <div class="glass-card p-7 rounded-3xl transition duration-300">
+                    <div class="w-12 h-12 rounded-2xl bg-gold-300 text-royal-950 flex items-center justify-center text-xl font-bold mb-5">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <h3 class="font-display text-lg font-bold text-cream-50">Modern Animations</h3>
+                    <p class="text-cream-200/75 text-sm mt-2 leading-relaxed">Premium typography, 360° interactive elements aur luxury transitions jo customers ko attract karein.</p>
+                </div>
+
+                <div class="glass-card p-7 rounded-3xl transition duration-300">
+                    <div class="w-12 h-12 rounded-2xl bg-cream-50 text-royal-950 flex items-center justify-center text-xl font-bold mb-5">
+                        <i class="fa-brands fa-instagram"></i>
+                    </div>
+                    <h3 class="font-display text-lg font-bold text-cream-50">Direct Insta Support</h3>
+                    <p class="text-cream-200/75 text-sm mt-2 leading-relaxed">Koi bhi website generate karwani ho ya custom design chahiye, seedha Instagram par DM karein.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DIRECT CONTACT CTA BANNER -->
+    <section class="py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-5xl mx-auto rounded-[2rem] p-8 sm:p-14 text-center relative overflow-hidden border border-gold-300/30 bg-gradient-to-br from-royal-800/90 via-royal-900/95 to-royal-950 shadow-2xl">
+            <div class="relative z-10">
+                <span class="font-cursive text-4xl sm:text-5xl cursive-logo">GETSITE 01</span>
+                <h2 class="font-display text-2xl sm:text-4xl font-bold text-cream-50 mt-2">
+                    Kya Aapko Apni Website Banwani Hai?
+                </h2>
+                <p class="text-cream-200/80 text-sm sm:text-base max-w-xl mx-auto mt-4">
+                    Apna idea ya business details humein Instagram par bhejein. Hum aapke liye ek custom, fast aur professional website design karenge.
+                </p>
+                <div class="mt-8">
+                    <a href="https://www.instagram.com/getsite01" target="_blank" rel="noopener noreferrer"
+                       class="inline-flex items-center gap-3 bg-cream-50 hover:bg-gold-300 text-royal-950 font-extrabold px-9 py-4 rounded-full text-sm sm:text-base shadow-xl transition-all duration-300 transform hover:scale-105">
+                        <i class="fa-brands fa-instagram text-2xl"></i>
+                        <span>Message @getsite01 on Instagram</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-cream-50/10 bg-royal-950/90 py-8 px-4 text-center">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <span class="font-cursive text-3xl cursive-logo">GETSITE 01</span>
+            <p class="text-xs text-cream-200/60">&copy; <span id="year"></span> GETSITE 01 Web Studio. All Rights Reserved.</p>
+            <a href="https://www.instagram.com/getsite01" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-gold-300 hover:underline flex items-center gap-1.5">
+                <i class="fa-brands fa-instagram"></i> instagram.com/getsite01
+            </a>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT: 360° 3D LOGO GLOBE + SLIDING CATALOGUES -->
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // ==========================================
+        // 1. 360° INTERACTIVE 3D GLOBE FOR GETSITE 01
+        // ==========================================
+        function init360LogoGlobe() {
+            const container = document.getElementById('globe-container');
+            if (!container || typeof THREE === 'undefined') return;
+
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 1000);
+            camera.position.z = 5.4;
+
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            // Master Group to rotate 360° smoothly
+            const globeGroup = new THREE.Group();
+            scene.add(globeGroup);
+
+            // A. Inner Glowing Royal Blue Sphere
+            const coreGeo = new THREE.SphereGeometry(1.52, 48, 48);
+            const coreMat = new THREE.MeshPhongMaterial({
+                color: 0x0f223d,
+                emissive: 0x091526,
+                specular: 0xf3d999,
+                shininess: 60,
+                transparent: true,
+                opacity: 0.92
+            });
+            const coreSphere = new THREE.Mesh(coreGeo, coreMat);
+            globeGroup.add(coreSphere);
+
+            // B. Golden Latitude/Longitude Wireframe Grid
+            const wireGeo = new THREE.SphereGeometry(1.56, 24, 18);
+            const wireMat = new THREE.MeshBasicMaterial({
+                color: 0xe5be67,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.22
+            });
+            const wireSphere = new THREE.Mesh(wireGeo, wireMat);
+            globeGroup.add(wireSphere);
+
+            // C. Create High-Res Canvas Texture with "GETSITE 01" Logo wrapped 360°
+            function createLogoTexture(fontStyle, textColor, isBand) {
+                const canvas = document.createElement('canvas');
+                canvas.width = 2048;
+                canvas.height = isBand ? 512 : 1024;
+                const ctx = canvas.getContext('2d');
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                if (isBand) {
+                    // Subtle golden border lines on the 360° orbiting band
+                    ctx.fillStyle = 'rgba(9, 21, 38, 0.72)';
+                    ctx.fillRect(0, 70, canvas.width, canvas.height - 140);
+
+                    ctx.strokeStyle = 'rgba(243, 217, 153, 0.75)';
+                    ctx.lineWidth = 6;
+                    ctx.beginPath();
+                    ctx.moveTo(0, 75); ctx.lineTo(canvas.width, 75);
+                    ctx.moveTo(0, canvas.height - 75); ctx.lineTo(canvas.width, canvas.height - 75);
+                    ctx.stroke();
+                }
+
+                // Gold-Cream Gradient Text
+                const grad = ctx.createLinearGradient(0, 0, canvas.width, 0);
+                grad.addColorStop(0, '#FCFBF7');
+                grad.addColorStop(0.25, '#F3D999');
+                grad.addColorStop(0.5, '#FCFBF7');
+                grad.addColorStop(0.75, '#E5BE67');
+                grad.addColorStop(1, '#FCFBF7');
+
+                ctx.fillStyle = grad;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.shadowColor = 'rgba(229, 190, 103, 0.65)';
+                ctx.shadowBlur = 18;
+
+                if (isBand) {
+                    ctx.font = 'bold 135px "Great Vibes", cursive, serif';
+                    // Repeat twice across 360° so it's readable from front and back
+                    ctx.fillText('✦  GETSITE 01  ✦', canvas.width * 0.25, canvas.height / 2 + 8);
+                    ctx.fillText('✦  GETSITE 01  ✦', canvas.width * 0.75, canvas.height / 2 + 8);
+                } else {
+                    ctx.font = 'bold 120px "Cinzel", serif';
+                    ctx.fillText('GETSITE 01', canvas.width * 0.25, canvas.height * 0.5);
+                    ctx.fillText('GETSITE 01', canvas.width * 0.75, canvas.height * 0.5);
+                }
+
+                const texture = new THREE.CanvasTexture(canvas);
+                texture.anisotropy = 8;
+                return texture;
+            }
+
+            // D. Inner Globe Surface Logo Layer
+            const globeLogoGeo = new THREE.SphereGeometry(1.58, 48, 48);
+            const globeLogoMat = new THREE.MeshBasicMaterial({
+                map: createLogoTexture('Cinzel', '#F3D999', false),
+                transparent: true,
+                depthWrite: false
+            });
+            const globeLogoMesh = new THREE.Mesh(globeLogoGeo, globeLogoMat);
+            globeGroup.add(globeLogoMesh);
+
+            // E. Outer 360° Orbiting Cursive Brand Ribbon (Cylinder Band around Globe)
+            const bandGeo = new THREE.CylinderGeometry(1.92, 1.92, 0.68, 64, 1, true);
+            const bandMat = new THREE.MeshBasicMaterial({
+                map: createLogoTexture('Great Vibes', '#FCFBF7', true),
+                transparent: true,
+                side: THREE.DoubleSide,
+                depthWrite: false
+            });
+            const bandMesh = new THREE.Mesh(bandGeo, bandMat);
+            bandMesh.rotation.z = 0.18; // Stylish planetary tilt
+            globeGroup.add(bandMesh);
+
+            // F. Orbiting Golden Particles around the Globe
+            const particlesGeo = new THREE.BufferGeometry();
+            const particleCount = 90;
+            const posArray = new Float32Array(particleCount * 3);
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                const r = 2.1 + Math.random() * 0.45;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos((Math.random() * 2) - 1);
+                posArray[i] = r * Math.sin(phi) * Math.cos(theta);
+                posArray[i + 1] = r * Math.sin(phi) * Math.sin(theta);
+                posArray[i + 2] = r * Math.cos(phi);
+            }
+            particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            const particlesMat = new THREE.PointsMaterial({
+                size: 0.045,
+                color: 0xf3d999,
+                transparent: true,
+                opacity: 0.85
+            });
+            const particleSystem = new THREE.Points(particlesGeo, particlesMat);
+            globeGroup.add(particleSystem);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
+            scene.add(ambientLight);
+            const pointLight = new THREE.PointLight(0xf3d999, 1.5, 20);
+            pointLight.position.set(5, 5, 5);
+            scene.add(pointLight);
+
+            // ==========================================
+            // 360° DRAG & TOUCH INTERACTION CONTROLS
+            // ==========================================
+            let isDragging = false;
+            let previousPointer = { x: 0, y: 0 };
+            let velocity = { x: 0.006, y: 0 }; // Auto-spin speed
+
+            function onPointerDown(e) {
+                isDragging = true;
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                previousPointer = { x: clientX, y: clientY };
+            }
+
+            function onPointerMove(e) {
+                if (!isDragging) return;
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+                const deltaX = clientX - previousPointer.x;
+                const deltaY = clientY - previousPointer.y;
+
+                velocity.x = deltaX * 0.008;
+                velocity.y = deltaY * 0.008;
+
+                globeGroup.rotation.y += velocity.x;
+                globeGroup.rotation.x += velocity.y;
+                // Keep vertical tilt comfortable while allowing full 360° horizontal spin
+                globeGroup.rotation.x = Math.max(-0.85, Math.min(0.85, globeGroup.rotation.x));
+
+                previousPointer = { x: clientX, y: clientY };
+            }
+
+            function onPointerUp() {
+                isDragging = false;
+            }
+
+            container.addEventListener('mousedown', onPointerDown);
+            window.addEventListener('mousemove', onPointerMove);
+            window.addEventListener('mouseup', onPointerUp);
+
+            container.addEventListener('touchstart', onPointerDown, { passive: true });
+            window.addEventListener('touchmove', onPointerMove, { passive: true });
+            window.addEventListener('touchend', onPointerUp);
+
+            // Animation Loop
+            function animate() {
+                requestAnimationFrame(animate);
+
+                if (!isDragging) {
+                    // Smooth momentum decay back to gentle 360° auto-rotation
+                    velocity.x += (0.006 - velocity.x) * 0.04;
+                    velocity.y *= 0.92;
+                    globeGroup.rotation.y += velocity.x;
+                    globeGroup.rotation.x += velocity.y;
+                }
+
+                // Counter-rotate inner sphere slightly for depth effect
+                wireSphere.rotation.y -= 0.002;
+                particleSystem.rotation.y += 0.0015;
+
+                renderer.render(scene, camera);
+            }
+
+            // Re-render once Google Fonts finish loading so Cursive font draws crisply on 3D Globe
+            document.fonts.ready.then(() => {
+                bandMat.map = createLogoTexture('Great Vibes', '#FCFBF7', true);
+                bandMat.needsUpdate = true;
+                globeLogoMat.map = createLogoTexture('Cinzel', '#F3D999', false);
+                globeLogoMat.needsUpdate = true;
+            });
+
+            // Handle Window Resize
+            window.addEventListener('resize', () => {
+                if (!container) return;
+                const newW = container.clientWidth;
+                const newH = container.clientHeight;
+                camera.aspect = newW / newH;
+                camera.updateProjectionMatrix();
+                renderer.setSize(newW, newH);
+            });
+
+            animate();
+        }
+
+        // ==========================================
+        // 2. SLIDING CATALOGUES & TOUCH SWIPE
+        // ==========================================
+        const instaLink = "https://www.instagram.com/getsite01";
+
+        const catalogueData = [
+            // Section 0: E-Commerce
+            [
+                {
+                    title: "Apparel & Fashion Store",
+                    tag: "E-Commerce",
+                    desc: "Size chart, WhatsApp/Insta quick order, product zoom aur mobile-first checkout layout.",
+                    icon: "fa-shirt",
+                    features: ["Product Gallery", "Instant Order Button", "Fast Loading"]
+                },
+                {
+                    title: "Luxury Jewelry & Watches",
+                    tag: "Premium Store",
+                    desc: "Royal dark/cream aesthetic ke saath high-resolution catalog aur collection filters.",
+                    icon: "fa-gem",
+                    features: ["HD Showcase", "Category Filter", "DM Inquiry"]
+                },
+                {
+                    title: "Electronics & Gadgets Hub",
+                    tag: "Retail Catalog",
+                    desc: "Specs comparison, offer banners aur easy stock update system ke saath.",
+                    icon: "fa-headphones",
+                    features: ["Offer Sliders", "Spec Cards", "Mobile Optimized"]
+                }
+            ],
+            // Section 1: Business & Agency
+            [
+                {
+                    title: "Corporate & Startup Website",
+                    tag: "Business",
+                    desc: "Aapki company ki services, client reviews aur brand profile ke liye ek trustworthy website.",
+                    icon: "fa-briefcase",
+                    features: ["Service Showcase", "Direct Lead Link", "SEO Ready"]
+                },
+                {
+                    title: "Real Estate & Interiors",
+                    tag: "Property",
+                    desc: "Property listings, floor plans aur site-visit booking ke liye modern interactive layout.",
+                    icon: "fa-city",
+                    features: ["Gallery Tour", "Location Map", "Quick Contact"]
+                },
+                {
+                    title: "Gym, Salon & Local Brands",
+                    tag: "Local Business",
+                    desc: "Membership plans, transformation gallery aur appointment booking ke liye best design.",
+                    icon: "fa-dumbbell",
+                    features: ["Pricing Tables", "Before/After", "Insta Integration"]
+                }
+            ],
+            // Section 2: Portfolio & Creators
+            [
+                {
+                    title: "Personal Brand & Bio Link",
+                    tag: "Creator",
+                    desc: "Influencers aur creators ke liye custom link-in-bio aur collaboration portfolio page.",
+                    icon: "fa-star",
+                    features: ["Social Links", "Media Kit", "Custom Animations"]
+                },
+                {
+                    title: "Photographer & Video Editor",
+                    tag: "Creative",
+                    desc: "Smooth video reels grid, photo lightbox aur client booking section ke saath.",
+                    icon: "fa-camera-retro",
+                    features: ["Reels Showcase", "HD Grid", "Fast Delivery"]
+                },
+                {
+                    title: "Freelancer & Developer",
+                    tag: "Portfolio",
+                    desc: "Projects, skills aur testimonials ko ek premium interactive style mein dikhayein.",
+                    icon: "fa-laptop-code",
+                    features: ["Project Cards", "Resume View", "Direct DM"]
+                }
+            ],
+            // Section 3: Custom & Landing Pages
+            [
+                {
+                    title: "High-Converting Ad Landing Page",
+                    tag: "Marketing",
+                    desc: "Instagram aur Facebook ads se aane wale traffic ko customers mein badalne ke liye.",
+                    icon: "fa-rocket",
+                    features: ["Fast Speed", "Clear CTA", "Mobile First"]
+                },
+                {
+                    title: "Event & Wedding Invitation",
+                    tag: "Digital Invite",
+                    desc: "Countdown timer, venue map aur animated couple/event story ke saath digital invite.",
+                    icon: "fa-envelope-open-text",
+                    features: ["Live Countdown", "Map Pin", "Music & Animation"]
+                },
+                {
+                    title: "Custom Web App / Dashboard",
+                    tag: "Bespoke",
+                    desc: "Aapke unique idea ke hisab se custom calculators, admin panels aur interactive tools.",
+                    icon: "fa-gears",
+                    features: ["Custom Logic", "Admin Control", "Tailored UI"]
+                }
+            ]
+        ];
+
+        let currentIndex = 0;
+
+        function renderCatalogue(direction = 'right') {
+            const grid = document.getElementById('catalogue-grid');
+            const items = catalogueData[currentIndex];
+            const animClass = direction === 'right' ? 'animate-slide-right' : 'animate-slide-left';
+
+            grid.innerHTML = '';
+            items.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.style.animationDelay = `${idx * 80}ms`;
+                card.className = `glass-card rounded-3xl p-7 flex flex-col justify-between transition-all duration-300 opacity-0 ${animClass}`;
+                
+                const tagsHtml = item.features.map(f => 
+                    `<span class="text-[11px] bg-royal-950/80 text-cream-100/90 border border-cream-50/10 px-2.5 py-1 rounded-lg">${f}</span>`
+                ).join('');
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="px-3 py-1 rounded-full bg-gold-300/15 text-gold-300 border border-gold-300/30 text-xs font-bold tracking-wide">
+                                ${item.tag}
+                            </span>
+                            <div class="w-11 h-11 rounded-2xl bg-cream-50/10 text-cream-50 flex items-center justify-center text-lg">
+                                <i class="fa-solid ${item.icon}"></i>
+                            </div>
+                        </div>
+
+                        <h3 class="font-display text-xl font-bold text-cream-50 mb-2">${item.title}</h3>
+                        <p class="text-cream-200/75 text-sm leading-relaxed mb-5">${item.desc}</p>
+
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            ${tagsHtml}
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-cream-50/10">
+                        <a href="${instaLink}" target="_blank" rel="noopener noreferrer" 
+                           class="w-full inline-flex items-center justify-center gap-2 bg-cream-50 hover:bg-gold-300 text-royal-950 font-bold py-3 px-4 rounded-xl text-xs sm:text-sm transition-all duration-300 group">
+                            <i class="fa-brands fa-instagram text-base"></i>
+                            <span>Order Similar Website</span>
+                            <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                        </a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            updateTabsAndDots();
+        }
+
+        function updateTabsAndDots() {
+            const tabs = document.querySelectorAll('.cat-tab');
+            tabs.forEach((tab, idx) => {
+                if (idx === currentIndex) {
+                    tab.className = "cat-tab active px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-300 bg-cream-50 text-royal-950 shadow-lg scale-105";
+                    tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                } else {
+                    tab.className = "cat-tab px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-300 bg-royal-900/80 text-cream-100/80 border border-cream-50/15 hover:border-gold-300/50";
+                }
+            });
+
+            const dotsContainer = document.getElementById('pagination-dots');
+            dotsContainer.innerHTML = '';
+            catalogueData.forEach((_, idx) => {
+                const dot = document.createElement('button');
+                dot.ariaLabel = `Slide ${idx + 1}`;
+                dot.onclick = () => switchCategory(idx);
+                dot.className = idx === currentIndex 
+                    ? "h-2.5 w-8 rounded-full bg-gold-300 transition-all duration-300"
+                    : "h-2.5 w-2.5 rounded-full bg-cream-50/25 hover:bg-cream-50/50 transition-all duration-300";
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        function switchCategory(index) {
+            if (index === currentIndex) return;
+            const direction = index > currentIndex ? 'right' : 'left';
+            currentIndex = index;
+            renderCatalogue(direction);
+        }
+
+        function nextCategory() {
+            currentIndex = (currentIndex + 1) % catalogueData.length;
+            renderCatalogue('right');
+        }
+
+        function prevCategory() {
+            currentIndex = (currentIndex - 1 + catalogueData.length) % catalogueData.length;
+            renderCatalogue('left');
+        }
+
+        // Touch Swipe Support for Mobile Sliding
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const swipeArea = document.getElementById('swipe-area');
+
+        swipeArea.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        swipeArea.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const threshold = 50;
+            if (touchStartX - touchEndX > threshold) {
+                nextCategory();
+            } else if (touchEndX - touchStartX > threshold) {
+                prevCategory();
+            }
+        }, { passive: true });
+
+        window.onload = () => {
+            init360LogoGlobe();
+            renderCatalogue('right');
+        };
+    </script>
+</body>
+</html>
